@@ -2,10 +2,11 @@ import 'dotenv/config.js';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
+import cors from 'cors';
 import postsRouter from './routes/postsRouter.js';
 import errorHandler from './middlewares/errorHandler.js';
 import uploadHandler from './middlewares/uploadHandler.js';
-import uploadValidationHandler from './middlewares/uploadValidationHandler.js';
+import uploadResponse from './middlewares/uploadResponse.js';
 import './db/mongoose.js';
 
 const app = express();
@@ -21,9 +22,15 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan.default('dev'));
 }
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN
+  })
+);
 app.use(express.json());
 app.use('/posts', postsRouter);
-app.post('/image-upload', uploadHandler.single('image'), uploadValidationHandler);
+app.post('/image-upload', uploadHandler.single('image'), uploadResponse);
+app.all('*', (req, res) => res.status(404).json({ error: 'Not found' }));
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server running on port: ${port}`));

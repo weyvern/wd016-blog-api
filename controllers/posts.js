@@ -15,9 +15,10 @@ export const getSinglePost = asyncHandler(async (req, res) => {
 });
 
 export const createNewPost = asyncHandler(async (req, res) => {
-  const { title, author, body, genre } = req.body;
+  const { title, cover, author, body, genre } = req.body;
   const newPost = await Post.create({
     title,
+    cover,
     author,
     body,
     genre
