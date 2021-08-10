@@ -19,10 +19,14 @@ export const signUp = asyncHandler(async (req, res) => {
 });
 
 export const signIn = asyncHandler(async (req, res) => {
-  const token = generateToken({ _id: 'asdafghjklñ' }, '12345');
+  const { email, password } = req.body;
+  if (!email || !password) throw new ErrorResponse('Email and password are required', 400);
+  const found = await User.findOne({ email }).select('+password');
+  if (!found) throw new ErrorResponse('User does not exist', 404);
+  const match = await bcrypt.compare(password, found.password);
+  if (!match) throw new ErrorResponse('Password is not correct', 401);
+  const token = generateToken({ _id: found._id }, process.env.JWT_SECRET);
   res.status(200).json({ token });
 });
 
-export const getUserInfo = asyncHandler(async (req, res) => {
-  res.send('User');
-});
+export const getUserInfo = asyncHandler(async (req, res) => res.status(200).json(req.user));
