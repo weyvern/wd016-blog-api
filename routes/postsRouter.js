@@ -13,7 +13,7 @@ const postsRouter = Router();
 postsRouter.get('/', getAllPosts);
 postsRouter.get('/:id', getSinglePost);
 postsRouter.post('/', verifyToken, createNewPost);
-postsRouter.put('/:id', updatePost);
-postsRouter.delete('/:id', deletePost);
+postsRouter.put('/:id', verifyToken, updatePost);
+postsRouter.delete('/:id', verifyToken, deletePost);
 
 export default postsRouter;

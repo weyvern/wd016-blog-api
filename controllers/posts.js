@@ -17,6 +17,8 @@ export const getSinglePost = asyncHandler(async (req, res) => {
 export const createNewPost = asyncHandler(async (req, res) => {
   const { title, cover, body, genre } = req.body;
   const { _id: author } = req.user;
+  if (!title || !author || !body || !genre)
+    throw new ErrorResponse('Title, author, body and genre are required fields');
   const newPost = await Post.create({
     title,
     cover,
@@ -29,7 +31,14 @@ export const createNewPost = asyncHandler(async (req, res) => {
 
 export const updatePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { title, author, body, genre } = req.body;
+  const { _id: author } = req.user;
+  const { title, body, genre } = req.body;
+  if (!title || !author || !body || !genre)
+    throw new ErrorResponse('Title, author, body and genre are required fields');
+  const post = await Post.findById(id);
+  if (!post) throw new ErrorResponse(`Post with id of ${id} not found`, 404);
+  if (String(post.author) !== String(author))
+    throw new ErrorResponse(`Cannot edit another user's posts`, 401);
   const updatedPost = await Post.findOneAndUpdate(
     { _id: id },
     { title, author, body, genre },
@@ -40,6 +49,11 @@ export const updatePost = asyncHandler(async (req, res) => {
 
 export const deletePost = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  await Post.deleteOne({ _id: id });
+  const { _id: author } = req.user;
+  const post = await Post.findById(id);
+  if (!post) throw new ErrorResponse(`Post with id of ${id} not found`, 404);
+  if (String(post.author) !== String(author))
+    throw new ErrorResponse(`Cannot delete another user's posts`, 401);
+  await post.delete();
   res.json({ success: `Post with id of ${id} was deleted` });
 });
