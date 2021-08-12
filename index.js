@@ -8,6 +8,7 @@ import postsRouter from './routes/postsRouter.js';
 import errorHandler from './middlewares/errorHandler.js';
 import uploadHandler from './middlewares/uploadHandler.js';
 import uploadResponse from './middlewares/uploadResponse.js';
+import verifyToken from './middlewares/verifyToken.js';
 import './db/mongoose.js';
 
 const app = express();
@@ -31,7 +32,7 @@ app.use(
 app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/posts', postsRouter);
-app.post('/image-upload', uploadHandler.single('image'), uploadResponse);
+app.post('/image-upload', verifyToken, uploadHandler.single('image'), uploadResponse);
 app.all('*', (req, res) => res.status(404).json({ error: 'Not found' }));
 app.use(errorHandler);
 
