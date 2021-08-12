@@ -10,7 +10,7 @@ const postSchema = new Schema({
   cover: { type: String, required: true },
   author: { type: ObjectId, required: true, ref: 'User' },
   body: { type: String, required: true },
-  genre: { type: String, enum: ['fantasy', 'sci-fi', 'history', 'sports'], required: true },
+  genre: { type: String, enum: ['fantasy', 'sci-fi', 'history', 'sports', 'tv/movies', 'code'], required: true },
   date: { type: Date, default: Date.now }
 });
 
