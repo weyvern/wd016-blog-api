@@ -1,4 +1,4 @@
-# CRUD API + Mongo
+# WD016 Blog (backend)
 
 ![WBS Coding School](https://mlsf03rmjfdn.i.optimole.com/fVWTwdQ.Z_5R~130ed/w:auto/h:auto/q:90/https://www.wbscodingschool.com/files/WBS_CODING_SCHOOL_logo.svg)
 
@@ -18,7 +18,7 @@ npm install
 The app needs the following environment variables
 
 - MONGO_URI=MongoDB connection string
-- CORS_ORIGIN=Allowed origin (CORS)
+- CORS_ORIGIN=Allowed origin (CORS) ([Frontend](https://github.com/weyvern/wd016-blog-frontend))
 - JWT_SECRET=Secret to sign auth tokens
 - AWS_BUCKET=Name of S3 bucket, if a value is passed the next 3 values are required and AWS S3 will be used, if not, files will be stored in local server
 - AWS_ACCESS_KEY_ID=AWS access id
